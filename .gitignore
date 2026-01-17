@@ -34,7 +34,6 @@ build/
 Thumbs.db
 
 # Data
-data/*.csv
 data/*.xlsx
 !data/.gitkeep
 
