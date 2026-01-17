@@ -17,7 +17,7 @@ st.markdown("""
 
 # Barra lateral customizada
 with st.sidebar:
-    st.title("📚 Navegação")
+    st.title("Navegação")
     st.page_link("app.py", label="Resumo", icon="📊")
     st.page_link("pages/sessao_01_contexto.py", label="Contexto", icon="🌲")
     st.page_link("pages/sessao_02_perguntas.py", label="Perguntas", icon="❓")
