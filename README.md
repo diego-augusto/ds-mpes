@@ -12,7 +12,7 @@ Aplicação interativa desenvolvida com Streamlit, pandas e plotly para análise
 
 1. **Clone ou navegue até o diretório do projeto:**
    ```bash
-   cd c:\Users\daugu\Desktop\workspace\ds-mpes
+   git clone git@github.com:diego-augusto/ds-mpes.git
    ```
 
 2. **Crie um ambiente virtual:**
