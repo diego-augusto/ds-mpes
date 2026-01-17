@@ -14,6 +14,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Esconder navegação padrão do Streamlit
+st.markdown("""
+<style>
+    [data-testid="stSidebarNav"] {
+        display: none;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Barra lateral customizada
+with st.sidebar:
+    st.title("📚 Navegação")
+    st.page_link("app.py", label="Resumo", icon="📊")
+    st.page_link("pages/sessao_01_contexto.py", label="Contexto", icon="🌲")
+    st.page_link("pages/sessao_02_perguntas.py", label="Perguntas", icon="❓")
+    st.page_link("pages/sobre.py", label="Sobre", icon="ℹ️")
+
 # CSS customizado para tema florestal
 st.markdown("""
 <style>
