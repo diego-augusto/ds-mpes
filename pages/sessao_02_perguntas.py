@@ -320,40 +320,61 @@ with tab3:
     # Análise combinada
     st.subheader("📊 Série Temporal: Evolução ao Longo do Ano")
     
+    # Seletor de variável para comparação
+    variavel_comparacao = st.selectbox(
+        "Selecionar variável para comparar com frequência de incêndios:",
+        ["Temperatura Média (°C)", "Umidade Relativa (%)", 
+         "FFMC Médio (Combustível Fino)", "DMC Médio (Combustível Profundo)",
+         "DC Médio (Seca)", "ISI Médio (Propagação)"],
+        index=0
+    )
+    
+    # Mapear seleção para coluna
+    mapping_variaveis = {
+        "Temperatura Média (°C)": ("Temp Média", "#F77F00", "Temperatura Média (°C)"),
+        "Umidade Relativa (%)": ("Umidade Média", "#4A90E2", "Umidade Relativa (%)"),
+        "FFMC Médio (Combustível Fino)": ("FFMC Médio", "#E67E22", "FFMC Médio"),
+        "DMC Médio (Combustível Profundo)": ("DMC Médio", "#9B59B6", "DMC Médio"),
+        "DC Médio (Seca)": ("DC Médio", "#C0392B", "DC Médio"),
+        "ISI Médio (Propagação)": ("ISI Médio", "#E74C3C", "ISI Médio")
+    }
+    
+    coluna_variavel, cor_variavel, label_variavel = mapping_variaveis[variavel_comparacao]
+    
     fig_combined = go.Figure()
     
     # Eixo Y primário: Frequência
     fig_combined.add_trace(go.Scatter(
         x=monthly_data['Mês'],
         y=monthly_data['Frequência'],
-        name='Frequência',
+        name='Frequência de Incêndios',
         mode='lines+markers',
         yaxis='y1',
         line=dict(color='#E63946', width=3),
         marker=dict(size=10)
     ))
     
-    # Eixo Y secundário: Temperatura média
+    # Eixo Y secundário: Variável selecionada
     fig_combined.add_trace(go.Scatter(
         x=monthly_data['Mês'],
-        y=monthly_data['Temp Média'],
-        name='Temperatura Média',
+        y=monthly_data[coluna_variavel],
+        name=label_variavel,
         mode='lines+markers',
         yaxis='y2',
-        line=dict(color='#F77F00', width=2, dash='dash'),
+        line=dict(color=cor_variavel, width=2, dash='dash'),
         marker=dict(size=8)
     ))
     
     fig_combined.update_layout(
-        title="Relação entre Frequência de Incêndios e Temperatura",
+        title=f"Relação entre Frequência de Incêndios e {label_variavel}",
         xaxis=dict(title='Mês'),
         yaxis=dict(
             title=dict(text='Frequência de Incêndios', font=dict(color='#E63946')),
             tickfont=dict(color='#E63946')
         ),
         yaxis2=dict(
-            title=dict(text='Temperatura Média (°C)', font=dict(color='#F77F00')),
-            tickfont=dict(color='#F77F00'),
+            title=dict(text=label_variavel, font=dict(color=cor_variavel)),
+            tickfont=dict(color=cor_variavel),
             anchor='x',
             overlaying='y',
             side='right'
@@ -364,6 +385,29 @@ with tab3:
     )
     
     st.plotly_chart(fig_combined, use_container_width=True)
+    
+    # Explicação das variáveis FWI
+    with st.expander("ℹ️ O que significam os índices de combustão (FWI)?"):
+        st.markdown("""
+        **Índices de Perigo de Incêndio Florestal (FWI):**
+        
+        - **FFMC (Fine Fuel Moisture Code)**: Umidade do combustível fino (folhas, galhos pequenos)
+          - Seca rápida e queima rápido
+          - Maior FFMC = maior risco de propagação rápida
+        
+        - **DMC (Duff Moisture Code)**: Umidade do combustível profundo (serapilheira)
+          - Seca mais lentamente
+          - Maior DMC = maior duração potencial do incêndio
+        
+        - **DC (Drought Code)**: Código de seca (solos e turfa profunda)
+          - Indicador de seca a longo prazo
+          - Maior DC = condições secas extremas
+        
+        - **ISI (Initial Spread Index)**: Índice de propagação inicial
+          - Prediz a velocidade de propagação
+          - Maior ISI = maior velocidade de propagação
+        """)
+    
     
     # Box plot: Distribuição de área por mês
     st.subheader("📦 Distribuição de Áreas Queimadas por Mês")
